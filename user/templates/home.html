@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+   <h3>Welcome {{ fullname }} </h3>
+<br>
+<h3>Plans</h3>
+{% for plan in plans %}
+    <strong>{{ plan.name }}</strong> - <strong>Cost</strong>={{ plan.cost }} -- <strong>Storage</strong>={{ plan.storage }} -- <strong>Details</strong>={{ plan.details }}
+{% endfor %}
+<br><br>
+{% for memorial in associated_memorial_profiles %}
+    <strong>{{ memorial.title }}</strong>
+{% endfor %}<br><br>
+    <a href="{% url 'logout'  %}"><button>Logout !</button></a>
+
+</body>
+</html>

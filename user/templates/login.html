@@ -129,25 +129,16 @@
 
     <div class="card mx-auto">
         <div class="card-header">
-            <h2 class="mb-0">Signup Form</h2>
+            <h2 class="mb-0">LOGIN </h2>
         </div>
         <div class="card-body">
 
-            <form id="signupForm" method="post" action="{% url 'signup' %}">
+            <form id="signupForm" method="post" action="{% url 'login' %}">
                 {% csrf_token %}
 
-                <div class="mb-3">
-                    <label for="full_name" class="form-label">Full Name</label>
-                    <input type="text" id="full_name" name="full_name" class="form-control" required>
-                </div>
 
                 <div class="mb-3">
-                    <label for="mobile_number" class="form-label">Mobile Number</label>
-                    <input type="text" id="mobile_number" name="mobile_number" class="form-control" required>
-                </div>
-
-                <div class="mb-3">
-                    <label for="email" class="form-label">Email ID</label>
+                    <label for="email" class="form-label">Email ID / Username</label>
                     <input type="email" id="email" name="email" class="form-control" required>
                 </div>
 
@@ -156,14 +147,9 @@
                     <input type="password" id="password" name="password" class="form-control" required>
                 </div>
 
-                <div class="mb-3">
-                    <label for="confirm-password" class="form-label">Confirm Password</label>
-                    <input type="password" id="confirm-password" name="confirm_password" class="form-control" required>
-                    <div id="passwordFeedback" class="text-danger"></div>
-                </div>
 
                 <div class="d-grid">
-                    <button type="submit" class="btn btn-primary">Signup</button>
+                    <button type="submit" class="btn btn-primary">Login</button>
                 </div>
 
             </form>

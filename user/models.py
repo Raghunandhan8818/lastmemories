@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+
+
 # Create your models here.
 
 
@@ -14,6 +16,7 @@ class User(AbstractUser):
         self.username = self.email
         super(User, self).save(*args, **kwargs)
 
+
 class Plan(models.Model):
     name = models.TextField()
     cost = models.PositiveIntegerField()
@@ -23,30 +26,47 @@ class Plan(models.Model):
     def __str__(self):
         return self.name
 
+
 class MemorialProfile(models.Model):
-    title = models.CharField(max_length=200,blank=True)
+    title = models.CharField(max_length=200, blank=True)
     about = models.TextField()
-    owner = models.ForeignKey(User,on_delete=models.DO_NOTHING,related_name="associated_memorial")
+    owner = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="associated_memorial")
     current_storage = models.PositiveIntegerField()
-    current_plan = models.ForeignKey(Plan,on_delete=models.DO_NOTHING,related_name="associated_plan")
+    current_plan = models.ForeignKey(Plan, on_delete=models.DO_NOTHING, related_name="associated_plan")
 
     def __str__(self):
         return self.title
 
+
 class ProfilePermission(models.Model):
-    user = models.ForeignKey(User,on_delete=models.DO_NOTHING,related_name="associated_user")
-    permission = models.CharField(max_length=20,default="view")
-    memorial_profile = models.ForeignKey(MemorialProfile, on_delete=models.DO_NOTHING, related_name="associated_memorial_profile")
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="associated_user")
+    permission = models.CharField(max_length=20, default="view")
+    memorial_profile = models.ForeignKey(MemorialProfile, on_delete=models.DO_NOTHING,
+                                         related_name="associated_memorial_profile")
 
     def __str__(self):
-            return self.user
+        return self.user.fullname
 
 
+def get_file_path(instance, filename):
+    memorial_title = instance.memorial.title.replace(' ', '_') + "_" + str(instance.memorial.id)
+    return f"{memorial_title}/{filename}"
 
-#MemorialProfile  -> owner (User) , title, about  , users(can_edit, can_view) ,current_storage , current_plan
 
-#media - > file , associated_memorial, size
+class File(models.Model):
+    file = models.FileField(upload_to=get_file_path)
+    name = models.CharField(max_length=200, blank=True)
+    description = models.TextField()
+    memorial = models.ForeignKey(MemorialProfile, on_delete=models.DO_NOTHING, related_name="related_files")
+    size = models.DecimalField(blank=True, decimal_places=3, max_digits=10)
 
-#Plan -> name , details , cost, storage
+    def __str__(self):
+        return self.memorial.title + "-" + self.name
 
-#Transaction -> yet to be decided
+# MemorialProfile  -> owner (User) , title, about  , users(can_edit, can_view) ,current_storage , current_plan
+
+# media - > file , associated_memorial, size
+
+# Plan -> name , details , cost, storage
+
+# Transaction -> yet to be decided
